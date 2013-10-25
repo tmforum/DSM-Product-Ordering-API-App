@@ -1,0 +1,168 @@
+<div class="well" ng-show="myData.currentOrder == null">
+<h1 class="lead">Product Orders List</h1>
+  <form class="form-search pull-center">
+    <div class="input-append">
+      <input type="text" ng-model="filterText" class="span2 search-query" placeholder="Filter current page">
+      <button ng-click="filterText = null" class="btn">Clear Filter</button>
+    </div>
+  </form>
+
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th class="span2 sortable" ng-class="sortClass('id')" ng-click="setSort('id')">ID</th>        
+        <th class="span2 sortable" ng-class="sortClass('externalId')" ng-click="setSort('externalId')">External ID</th>
+        <th class="span2 sortable" ng-class="sortClass('status')" ng-click="setSort('status')">Status</th>
+        <th class="span2 sortable" ng-class="sortClass('type')" ng-click="setSort('type')">Type</th>
+        <th class="span2 sortable" ng-class="sortClass('description')" ng-click="setSort('description')">Description</th>
+        <th class="span2 sortable" ng-class="sortClass('orderDate')" ng-click="setSort('orderDate')">Order Date</th>
+        <th class="span2 sortable" ng-class="sortClass('requestedCompletionDate')" ng-click="setSort('requestedCompletionDate')">Requested Completion Date</th>
+        <th class="span2 sortable" ng-class="sortClass('completionDate')" ng-click="setSort('completionDate')">Completion Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="order in myData.orderList | filter:filterText">
+        <td class="text-center"><a ng-click="setCurrentOrderById(order.id)">{{order.id}}</a></td>
+        <td class="text-center">{{order.externalId}}</td>
+        <td class="text-center">{{order.status}}</td>
+        <td class="text-center">{{order.type}}</td>
+        <td class="text-center">{{order.description}}</td>
+        <td class="text-center">{{order.orderDate}}</td>
+        <td class="text-center">{{order.requestedCompletionDate}}</td>
+        <td class="text-center">{{order.completionDate}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="well" ng-show="myData.currentOrder != null">
+<h1 class="lead">Product Order Details</h1>
+  <a ng-click="showAll()"><b>&laquo Back to Product Orders List</b></a>
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th class="span2">ID</th>        
+        <th class="span2">External ID</th>
+        <th class="span2">Status</th>
+        <th class="span2">Type</th>
+        <th class="span2">Description</th>
+        <th class="span2">Order Date</th>
+        <th class="span2">Requested Completion Date</th>
+        <th class="span2">Completion Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="text-center">{{myData.currentOrder.id}}</td>
+        <td class="text-center">{{myData.currentOrder.externalId}}</td>
+        <td class="text-center">{{myData.currentOrder.status}}</td>
+        <td class="text-center">{{myData.currentOrder.type}}</td>
+        <td class="text-center">{{myData.currentOrder.description}}</td>
+        <td class="text-center">{{myData.currentOrder.orderDate}}</td>
+        <td class="text-center">{{myData.currentOrder.requestedCompletionDate}}</td>
+        <td class="text-center">{{myData.currentOrder.completionDate}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th class="span2">Order Items</th>
+        <th class="span2">Related Parties</th>
+      </tr>
+    </thead>
+    <tbody>
+        <td>
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr>	
+                <th class="span2">ID</th>
+                <th class="span2">Action</th>
+                <th class="span2">State</th>
+                <th class="span2">Product Offering</th>
+                <th class="span2">Product Characteristics</th>
+                <th class="span2">Product Specification</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="orderItem in myData.currentOrder.orderItems">
+                <td class="text-center">{{orderItem.id}}</td>
+                <td class="text-center">{{orderItem.action}}</td>
+                <td class="text-center">{{orderItem.state}}</td>
+
+                <td>
+                  <table class="table table-striped table-bordered">
+                    <thead>
+                      <tr>	
+                        <th class="span2">ID</th>
+                        <th class="span2">Name</th>
+                        <th class="span2">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <td class="text-center">{{orderItem.productOffering.id}}</td>
+                      <td class="text-center">{{orderItem.productOffering.name}}</td>
+                      <td class="text-center">{{orderItem.productOffering.description}}</td>
+                    </tbody>
+                  </table>
+                </td>
+
+                <td>
+                  <table class="table table-striped table-bordered">
+                    <thead>
+                      <tr>	
+                        <th class="span2">Name</th>
+                        <th class="span2">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="productCharacteristic in orderItem.product.productCharacteristics">
+                        <td class="text-center">{{productCharacteristic.name}}</td>
+                        <td class="text-center">{{productCharacteristic.value}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+
+                <td>
+                  <table class="table table-striped table-bordered">
+                    <thead>
+                      <tr>	
+                        <th class="span2">ID</th>
+                        <th class="span2">Name</th>
+                        <th class="span2">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <td class="text-center">{{orderItem.product.productSpecification.id}}</td>
+                      <td class="text-center">{{orderItem.product.productSpecification.name}}</td>
+                      <td class="text-center">{{orderItem.product.productSpecification.description}}</td>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+        </td>
+
+        <td>
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>	
+              <th class="span2">Reference</th>
+              <th class="span2">Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="relatedParty in myData.currentOrder.relatedParties">
+              <td class="text-center">{{relatedParty.reference}}</td>
+              <td class="text-center">{{relatedParty.role}}</td>
+            </tr>
+          </tbody>
+        </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
